@@ -29,14 +29,15 @@ class PickerGenericOnOff extends Ui.Picker {
 
   function initialize(_sPropertyId as String, _sTitle as String) {
     // Get property
-    var bOnOff = App.Properties.getValue(_sPropertyId) as Boolean;
+    var bOnOff = false;
+    bOnOff = App.Properties.getValue(_sPropertyId) as Boolean;
 
     // Initialize picker
     var oFactory = new PickerFactoryDictionary([true, false], [Ui.loadResource(Rez.Strings.valueOn), Ui.loadResource(Rez.Strings.valueOff)], null);
     Picker.initialize({
       :title => new Ui.Text({ :text => _sTitle, :font => Gfx.FONT_TINY, :locX=>Ui.LAYOUT_HALIGN_CENTER, :locY=>Ui.LAYOUT_VALIGN_BOTTOM, :color => Gfx.COLOR_BLUE }),
       :pattern => [ oFactory ],
-      :defaults => [ oFactory.indexOfKey(bOnOff != null ? bOnOff : false) ]
+      :defaults => [ oFactory.indexOfKey(bOnOff) ]
     });
   }
 
@@ -60,7 +61,7 @@ class PickerDelegateGenericOnOff extends Ui.PickerDelegate {
     self.sPropertyId = _sPropertyId;
   }
 
-  function onAccept(_amValues as Array<App.PropertyValueType>) {
+  function onAccept(_amValues ) {
     // Set property and exit
     App.Properties.setValue(self.sPropertyId, _amValues[0]);
     $.RL_oSettings.load();
